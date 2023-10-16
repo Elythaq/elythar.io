@@ -949,6 +949,13 @@ section:nth-child(odd) .animate.scroll,
         background: var(--bg-color);
         opacity: .6;
     }
+	.about-content {
+    text-align: left;;
+	}
+	.home-content {
+    text-align: left;;
+	}
+
 }
 
 @media (max-width: 520px) {
