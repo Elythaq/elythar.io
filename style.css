@@ -948,29 +948,6 @@ section:nth-child(odd) .animate.scroll,
         background: var(--bg-color);
         opacity: .6;
     }
-    .btn-box {
-        flex-direction: column; 
-        justify-content: center;
-        align-items: center;
-        width: 100%; 
-        height: auto;
-        margin: 2rem 0; 
-    }
-
-    .btn-box .btn {
-        width: 80%;
-        margin: 0.5rem 0;
-    }
-
-
-    .home-sci {
-		margin-top: 2rem;
-        position: relative;
-        width: auto; 
-        display: flex;
-        justify-content: center; 
-        margin: 2rem 0; 
-    }
 }
 
 @media (max-width: 520px) {
