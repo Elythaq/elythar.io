@@ -964,6 +964,7 @@ section:nth-child(odd) .animate.scroll,
 
 
     .home-sci {
+		margin-top: 2rem;
         position: relative;
         width: auto; 
         display: flex;
