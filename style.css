@@ -969,14 +969,24 @@ section:nth-child(odd) .animate.scroll,
         padding: 2rem 4%;
     }
 }
-
+@media (min-width: 850px) {
+    .projects .project-row {
+        flex-direction: row;
+    }
+}
 @media (max-width: 850px) {
     .animate.home-img {
         width: 55%;
     }
+	.projects .project-row {
+        flex-direction: row;
+    }
 }
-
-
+@media (min-width: 768px) {
+    .projects .project-row {
+        flex-direction: row;
+    }
+}
 @media (max-width: 768px) {
     .header {
         background: var(--bg-color);
