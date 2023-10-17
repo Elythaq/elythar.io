@@ -1156,7 +1156,12 @@ section:nth-child(odd) .animate.scroll,
         font-size: 5rem;
     }
 }
-
+@media (min-width: 1200px) {
+    .contact {
+        display: block !important; 
+        overflow: visible !important; 
+    }
+}
 
 /* KEYFRAMES ANIMATION */
 @keyframes homeBgText {
