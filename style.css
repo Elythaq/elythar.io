@@ -654,79 +654,37 @@ span {
     width: 75%;
 }
 
-.projects {
+.project-filters {
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 5rem 0;
-}
-.project-hidden {
-    display: none;
+    margin-bottom: 2rem;
 }
 
-.project-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    justify-content: center;
-}
-
-.project-card {
-    flex: 1 1 20rem;
-    max-width: 300px;
-    border: .2rem solid var(--main-color);
-    padding: 1rem;
-    border-radius: .6rem;
-    background-color: #ffffff;
-}
-
-.project-card h3 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-}
-
-.project-card label {
-    display: block;
-    font-size: 1.2rem;
-    margin-bottom: .5rem;
-}
-#canvas3D {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-}
-.project-card input[type="number"] {
-    padding: 0.5rem;
-    border: 1px solid var(--main-color);
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 0.5rem;
-}
-.project-card label {
-    margin-bottom: 1rem;
-}
-.project-card:hover {
-    transform: translateY(-5px);
-    transition: transform 0.3s;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-}
-
-.project-card button {
-    display: block;
-    background-color: var(--main-color);
-    border: none;
+.filter-btn {
     padding: .5rem 1rem;
+    border: none;
+    background-color: var(--main-color);
     color: #ffffff;
     border-radius: .3rem;
     cursor: pointer;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin: 0 .5rem;
+    transition: background-color 0.3s;
 }
 
-.project-card button:hover {
+.filter-btn:hover {
     background-color: var(--second-bg-color);
 }
+
+.filter-btn.active {
+    background-color: var(--second-bg-color);
+}
+
+.projects h2 {
+    position: relative; 
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 
 .contact {
     min-height: auto;
@@ -1029,7 +987,13 @@ section:nth-child(odd) .animate.scroll,
 	.home-content {
     text-align: left;;
 	}
+    .skills .skills-row {
+        flex-direction: column;
+    }
 
+    .projects .project-row {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 520px) {

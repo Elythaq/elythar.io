@@ -255,23 +255,22 @@
 		<div class="project-filters">
 			<button class="filter-btn active" data-filter="all">All</button>
 			<button class="filter-btn" data-filter="Robotics">Robotics</button>
-			<button class="filter-btn" data-filter="python">AI/ML</button>
+			<button class="filter-btn" data-filter="AI_ML">AI/ML</button>
 			<button class="filter-btn" data-filter="csharp">Application</button>
 		</div>
 		<div class="project-row">
-        <!-- Robotics project -->
-			<div class="project-card Robotics">
-				<h3 class="title">Robotics IK Solver<span class="animate scroll" style="--i:2;"></span></h3>
 
-				<label for="x">X Position: <input type="number" id="x" value="1"></label>
-				<label for="y">Y Position: <input type="number" id="y" value="1"></label>
-				<label for="z">Z Position: <input type="number" id="z" value="1"></label>
-				<button onclick="updateTargetPosition()">Move to Position</button>
-
-				<div id="canvas3D" style="width: 100%; height: 300px; background-color: #eaeaea;"></div>
+		<div class="project-list">
+		        <!-- Robotics project -->
+			<div class="project-card AI_ML">
+				<h3>Machine Lerning & AI projects</h3>
+				<img src="images/project-image.jpg" alt="Project Image">
+				<p>Project Description</p>
+				<a href="https://github.com/SAIPRONE/ML.git" target="_blank" rel="noopener noreferrer">
+				<button>More Details</button>
+				</a>
 			</div>
 		</div>
-		<div class="project-list">
 	</section>
 	<!-- contact section design -->
 	<section class="contact" id="contact">
@@ -338,7 +337,6 @@
 
     <script src="script.js"></script>
 	<script src="https://threejs.org/build/three.js"></script>
-	<script src="robotics.js"></script>
 	<script src="filters.js"></script>
 
 </body>
