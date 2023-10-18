@@ -966,7 +966,7 @@ section:nth-child(odd) .animate.scroll,
 
 
 /* BREAKPOINTS */
-@media screen and (min-width: 1200px) and (min-height: 907px) {
+@media screen and (min-width: 800px) and (min-height: 600px) {
     .contact {
         display: block !important;
         opacity: 1 !important;
