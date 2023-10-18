@@ -966,6 +966,15 @@ section:nth-child(odd) .animate.scroll,
 
 
 /* BREAKPOINTS */
+@media screen and (min-width: 1200px) and (min-height: 907px) {
+    .contact {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+}
+
 @media (max-width: 1200px) {
     html {
         font-size: 55%;
