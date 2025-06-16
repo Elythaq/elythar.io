@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 AI-Powered E-Commerce Platform
 
-## Getting Started
+An interactive, scalable, full-stack digital marketplace built with **Next.js**, **Tailwind CSS**, **TypeScript**, **MongoDB**, **Stripe**, and modern authentication — designed to sell:
 
-First, run the development server:
+- ⚙️ Software & CLI tools
+- 🧩 Plugins & Add-ons
+- 🧠 AI/ML & Robotics Solutions
+- 🎮 Game Dev Assets (Unreal, Unity, Godot)
+- 🧪 Custom Testing & Development Services
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Tech       | Description                           |
+|------------|---------------------------------------|
+| **Next.js 14+** | App Router, SEO-friendly, hybrid rendering |
+| **Tailwind CSS** | Utility-first CSS framework |
+| **TypeScript** | Type-safe frontend/backend |
+| **MongoDB (Mongoose)** | NoSQL Database |
+| **Stripe** | Secure payments (one-time/subscription) |
+| **NextAuth.js** | Authentication (GitHub, email, more) |
+| **React Pro Sidebar** | Modern, collapsible sidebar |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ✅ Features
 
-To learn more about Next.js, take a look at the following resources:
+### 🔐 Authentication
+- [x] Sign up / Sign in
+- [x] Secure sessions via NextAuth.js
+- [x] OAuth support (GitHub, Google)
+- [x] Password reset/forgot
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🛍️ E-Commerce
+- [x] Product pages with media preview
+- [x] Stripe checkout (one-time)
+- [ ] Stripe subscriptions (🚧 coming soon)
+- [ ] Cart & quantity management
+- [ ] Coupon support & discounts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🧾 Orders & Dashboard
+- [x] Purchase history
+- [x] Digital product download links
+- [ ] Invoice generation (PDF) 🚧
+- [ ] License key system (optional)
 
-## Deploy on Vercel
+### 📊 Admin Panel
+- [x] Product management (upload, edit, delete)
+- [ ] Order analytics dashboard
+- [ ] User management
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🔍 Marketplace UI
+- [x] Filter by category/tag
+- [x] Mobile-first responsive layout
+- [x] Collapsible sidebar navigation
+- [ ] Search functionality 🚧
+- [ ] Ratings & reviews 🚧
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🌐 SEO & Hosting
+- [x] Meta tags, OG images, favicons
+- [x] GitHub Pages compatible via `next export`
+- [ ] Move to Vercel (recommended for SSR/APIs)
+
+---
+
+## 📁 Folder Structure
+
