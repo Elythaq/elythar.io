@@ -59,7 +59,6 @@ An interactive, scalable, full-stack digital marketplace built with **Next.js**,
 
 ### 🌐 SEO & Hosting
 - [x] Meta tags, OG images, favicons
-- [x] GitHub Pages compatible via `next export`
 - [ ] Move to Vercel (recommended for SSR/APIs)
 
 ---
