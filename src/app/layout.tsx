@@ -1,21 +1,14 @@
 'use client';
 
 import './globals.css';
-import { ProSidebarProvider } from '@/components/ProSidebarProvider';
-import { Sidebar } from '@/components/Sidebar';
-import { Menu } from '@/components/Menu';
-import { MenuItem } from '@/components/MenuItem';
-import { useProSidebar } from '@/hooks/useProSidebar';
-import { SubMenu } from '@/components/SubMenu';
-import SidebarLayout from '@/components/SidebarLayout';
+import Sidebar from '@/components/Sidebar';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
-        <ProSidebarProvider>
-          <SidebarLayout>{children}</SidebarLayout>
-        </ProSidebarProvider>
+      <body className="bg-black text-white flex">
+        <Sidebar />
+        <main className="flex-grow p-4">{children}</main>
       </body>
     </html>
   );

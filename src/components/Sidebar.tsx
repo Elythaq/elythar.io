@@ -1,279 +1,196 @@
 'use client';
-import React from 'react';
-import styled, { CSSObject } from '@emotion/styled';
-import classnames from 'classnames';
-import { useSidebar } from '../hooks/useSidebar';
-import { useMediaQuery } from '../hooks/useMediaQuery';
-import { sidebarClasses } from '../utils/utilityClasses';
-import { StyledBackdrop } from '../styles/StyledBackdrop';
-import Link from 'next/link';
-import {
-  FaCube,
-  FaCogs,
-  FaThLarge,
-  FaPuzzlePiece,
-  FaUsers,
-  FaInfoCircle,
-  FaWrench,
-  FaAngleDown,
-  FaAngleUp,
-} from 'react-icons/fa';
-type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
 
-const BREAK_POINTS: Record<BreakPoint, string> = {
-  xs: '480px',
-  sm: '576px',
-  md: '768px',
-  lg: '992px',
-  xl: '1200px',
-  xxl: '1600px',
-  always: 'always',
+import React, { useState } from 'react';
+import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { BarChart } from '@/icons/BarChart';
+import { Global } from '@/icons/Global';
+import { InkBottle } from '@/icons/InkBottle';
+import { Diamond } from '@/icons/Diamond';
+import { ShoppingCart } from '@/icons/ShoppingCart';
+import { Calendar } from '@/icons/Calendar';
+import { Book } from '@/icons/Book';
+import { Service } from '@/icons/Service';
+import { SidebarHeader } from '@/components/SidebarHeader';
+import { SidebarFooter } from '@/components/SidebarFooter';
+import { Typography } from '@/components/Typography';
+import { Switch } from '@/components/Switch';
+import { Badge } from '@/components/Badge';
+import { PackageBadges } from '@/components/PackageBadges';
+
+const themes = {
+  light: {
+    sidebar: {
+      backgroundColor: '#ffffff',
+      color: '#607489',
+    },
+    menu: {
+      menuContent: '#fbfcfd',
+      icon: '#0098e5',
+      hover: {
+        backgroundColor: '#c5e4ff',
+        color: '#44596e',
+      },
+      disabled: {
+        color: '#9fb6cf',
+      },
+    },
+  },
+  dark: {
+    sidebar: {
+      backgroundColor: '#0b2948',
+      color: '#8ba1b7',
+    },
+    menu: {
+      menuContent: '#082440',
+      icon: '#59d0ff',
+      hover: {
+        backgroundColor: '#00458b',
+        color: '#b6c8d9',
+      },
+      disabled: {
+        color: '#3e5e7e',
+      },
+    },
+  },
 };
 
-export interface SidebarProps extends React.HTMLAttributes<HTMLHtmlElement> {
-  /**
-   * width of the sidebar
-   * @default ```250px```
-   */
-  width?: string;
+const hexToRgba = (hex: string, alpha: number) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
 
-  /**
-   * width of the sidebar when collapsed
-   * @default ```80px```
-   */
-  collapsedWidth?: string;
+export default function Sidebar() {
+  const [collapsed, setCollapsed] = useState(false);
+  const [toggled, setToggled] = useState(false);
+  const [broken, setBroken] = useState(false);
+  const [rtl, setRtl] = useState(false);
+  const [hasImage, setHasImage] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
-  /**
-   * initial collapsed status
-   * @default ```false```
-   */
-  defaultCollapsed?: boolean;
+  const handleRTLChange = (e: React.ChangeEvent<HTMLInputElement>) => setRtl(e.target.checked);
+  const handleThemeChange = (e: React.ChangeEvent<HTMLInputElement>) => setTheme(e.target.checked ? 'dark' : 'light');
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => setHasImage(e.target.checked);
 
-  /**
-   * set when the sidebar should trigger responsiveness behavior
-   *
-   */
-  breakPoint?: BreakPoint;
-
-  /**
-   * alternative breakpoint value that will be used to trigger responsiveness
-   *
-   */
-  customBreakPoint?: string;
-
-  /**
-   * sidebar background color
-   */
-  backgroundColor?: string;
-
-  /**
-   * duration for the transition in milliseconds to be used in collapse and toggle behavior
-   * @default ```300```
-   */
-  transitionDuration?: number;
-
-  /**
-   * sidebar background image
-   */
-  image?: string;
-
-  rtl?: boolean;
-
-  rootStyles?: CSSObject;
-
-  children?: React.ReactNode;
-}
-
-interface StyledSidebarProps extends Omit<SidebarProps, 'backgroundColor'> {
-  collapsed?: boolean;
-  toggled?: boolean;
-  broken?: boolean;
-  rtl?: boolean;
-}
-
-type StyledSidebarContainerProps = Pick<SidebarProps, 'backgroundColor'>;
-
-const StyledSidebar = styled.aside<StyledSidebarProps>`
-  position: relative;
-  border-right-width: 1px;
-  border-right-style: solid;
-  border-color: #efefef;
-
-  transition: ${({ transitionDuration }) => `width, left, right, ${transitionDuration}ms`};
-
-  width: ${({ width }) => width};
-  min-width: ${({ width }) => width};
-
-  &.${sidebarClasses.collapsed} {
-    width: ${({ collapsedWidth }) => collapsedWidth};
-    min-width: ${({ collapsedWidth }) => collapsedWidth};
-  }
-
-  &.${sidebarClasses.rtl} {
-    direction: rtl;
-    border-right-width: none;
-    border-left-width: 1px;
-    border-right-style: none;
-    border-left-style: solid;
-  }
-
-  &.${sidebarClasses.broken} {
-    position: fixed;
-    height: 100%;
-    top: 0px;
-    z-index: 100;
-
-    ${({ rtl, width }) => (!rtl ? `left: -${width};` : '')}
-
-    &.${sidebarClasses.collapsed} {
-      ${({ rtl, collapsedWidth }) => (!rtl ? `left: -${collapsedWidth}; ` : '')}
-    }
-
-    &.${sidebarClasses.toggled} {
-      ${({ rtl }) => (!rtl ? `left: 0;` : '')}
-    }
-
-    &.${sidebarClasses.rtl} {
-      right: -${({ width }) => width};
-
-      &.${sidebarClasses.collapsed} {
-        right: -${({ collapsedWidth }) => collapsedWidth};
-      }
-
-      &.${sidebarClasses.toggled} {
-        right: 0;
-      }
-    }
-  }
-
-  ${({ rootStyles }) => rootStyles}
-`;
-
-const StyledSidebarContainer = styled.div<StyledSidebarContainerProps>`
-  position: relative;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 3;
-
-  ${({ backgroundColor }) => (backgroundColor ? `background-color:${backgroundColor};` : '')}
-`;
-
-const StyledSidebarImage = styled.img`
-  &.${sidebarClasses.image} {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 2;
-  }
-`;
-
-const SidebarFR: React.ForwardRefRenderFunction<HTMLHtmlElement, SidebarProps> = (
-  {
-    width = '250px',
-    collapsedWidth = '80px',
-    defaultCollapsed = false,
-    className,
-    children,
-    breakPoint,
-    customBreakPoint,
-    backgroundColor = 'rgb(249, 249, 249, 0.7)',
-    transitionDuration = 300,
-    image,
-    rtl,
-    rootStyles,
-    ...rest
-  },
-  ref,
-) => {
-  const broken = useMediaQuery(
-    customBreakPoint ?? (breakPoint ? BREAK_POINTS[breakPoint] : breakPoint),
-  );
-
-  const {
-    updateSidebarState,
-    collapsed: collapsedContext,
-    width: widthContext,
-    collapsedWidth: collapsedWidthContext,
-    broken: brokenContext,
-    toggled: toggledContext,
-    transitionDuration: transitionDurationContext,
-    rtl: rtlContext,
-  } = useSidebar();
-
-  const handleBackdropClick = () => {
-    updateSidebarState({ toggled: false });
+  const menuItemStyles = {
+    root: {
+      fontSize: '13px',
+      fontWeight: 400,
+    },
+    icon: {
+      color: themes[theme].menu.icon,
+    },
+    SubMenuExpandIcon: {
+      color: '#b6b7b9',
+    },
+    subMenuContent: ({ level }: any) => ({
+      backgroundColor: level === 0 ? hexToRgba(themes[theme].menu.menuContent, hasImage && !collapsed ? 0.4 : 1) : 'transparent',
+    }),
+    button: {
+      '&:hover': {
+        backgroundColor: hexToRgba(themes[theme].menu.hover.backgroundColor, hasImage ? 0.8 : 1),
+        color: themes[theme].menu.hover.color,
+      },
+    },
+    label: ({ open }: any) => ({
+      fontWeight: open ? 600 : undefined,
+    }),
   };
 
-  React.useEffect(() => {
-    updateSidebarState({ width, collapsedWidth, broken, rtl });
-  }, [width, collapsedWidth, broken, updateSidebarState, rtl]);
-
-  React.useEffect(() => {
-    updateSidebarState({
-      collapsed: defaultCollapsed,
-      transitionDuration,
-      toggled: false,
-    });
-  }, [defaultCollapsed, transitionDuration, updateSidebarState]);
-
   return (
-    <StyledSidebar
-      ref={ref}
-      data-testid={`${sidebarClasses.root}-test-id`}
-      rtl={rtlContext}
-      rootStyles={rootStyles}
-      width={widthContext}
-      collapsedWidth={collapsedWidthContext}
-      transitionDuration={transitionDurationContext ?? 300}
-      className={classnames(
-        sidebarClasses.root,
-        {
-          [sidebarClasses.collapsed]: collapsedContext,
-          [sidebarClasses.toggled]: toggledContext,
-          [sidebarClasses.broken]: brokenContext,
-          [sidebarClasses.rtl]: rtlContext,
-        },
-        className,
-      )}
-      {...rest}
-    >
-      <StyledSidebarContainer
-        data-testid={`${sidebarClasses.container}-test-id`}
-        className={sidebarClasses.container}
-        backgroundColor={backgroundColor}
+    <div style={{ display: 'flex', height: '100%', direction: rtl ? 'rtl' : 'ltr' }}>
+      <ProSidebar
+        collapsed={collapsed}
+        toggled={toggled}
+        onBackdropClick={() => setToggled(false)}
+        onBreakPoint={setBroken}
+        image={hasImage ? 'https://user-images.githubusercontent.com/25878302/144499035-2911184c-76d3-4611-86e7-bc4e8ff84ff5.jpg' : undefined}
+        rtl={rtl}
+        breakPoint="md"
+        backgroundColor={hexToRgba(themes[theme].sidebar.backgroundColor, hasImage ? 0.9 : 1)}
+        rootStyles={{ color: themes[theme].sidebar.color }}
       >
-        {children}
-      </StyledSidebarContainer>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <SidebarHeader rtl={rtl} style={{ marginBottom: '24px', marginTop: '16px' }} />
 
-      {image && (
-        <StyledSidebarImage
-          data-testid={`${sidebarClasses.image}-test-id`}
-          src={image}
-          alt="sidebar background"
-          className={sidebarClasses.image}
-        />
-      )}
+          <div style={{ flex: 1, marginBottom: '32px' }}>
+            <div style={{ padding: '0 24px', marginBottom: '8px' }}>
+              <Typography variant="body2" fontWeight={600} style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: '0.5px' }}>General</Typography>
+            </div>
+            <Menu menuItemStyles={menuItemStyles}>
+              <SubMenu label="Charts" icon={<BarChart />} suffix={<Badge variant="danger" shape="circle">6</Badge>}>
+                <MenuItem>Pie charts</MenuItem>
+                <MenuItem>Line charts</MenuItem>
+                <MenuItem>Bar charts</MenuItem>
+              </SubMenu>
+              <SubMenu label="Maps" icon={<Global />}>
+                <MenuItem>Google maps</MenuItem>
+                <MenuItem>Open street maps</MenuItem>
+              </SubMenu>
+              <SubMenu label="Theme" icon={<InkBottle />}>
+                <MenuItem>Dark</MenuItem>
+                <MenuItem>Light</MenuItem>
+              </SubMenu>
+              <SubMenu label="Components" icon={<Diamond />}>
+                <MenuItem>Grid</MenuItem>
+                <MenuItem>Layout</MenuItem>
+                <SubMenu label="Forms">
+                  <MenuItem>Input</MenuItem>
+                  <MenuItem>Select</MenuItem>
+                  <SubMenu label="More">
+                    <MenuItem>CheckBox</MenuItem>
+                    <MenuItem>Radio</MenuItem>
+                  </SubMenu>
+                </SubMenu>
+              </SubMenu>
+              <SubMenu label="E-commerce" icon={<ShoppingCart />}>
+                <MenuItem>Product</MenuItem>
+                <MenuItem>Orders</MenuItem>
+                <MenuItem>Credit card</MenuItem>
+              </SubMenu>
+            </Menu>
 
-      {brokenContext && toggledContext && (
-        <StyledBackdrop
-          data-testid={`${sidebarClasses.backdrop}-test-id`}
-          role="button"
-          tabIndex={0}
-          aria-label="backdrop"
-          onClick={handleBackdropClick}
-          onKeyPress={handleBackdropClick}
-          className={sidebarClasses.backdrop}
-        />
-      )}
-    </StyledSidebar>
+            <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '32px' }}>
+              <Typography variant="body2" fontWeight={600} style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: '0.5px' }}>Extra</Typography>
+            </div>
+            <Menu menuItemStyles={menuItemStyles}>
+              <MenuItem icon={<Calendar />} suffix={<Badge variant="success">New</Badge>}>Calendar</MenuItem>
+              <MenuItem icon={<Book />}>Documentation</MenuItem>
+              <MenuItem disabled icon={<Service />}>Examples</MenuItem>
+            </Menu>
+          </div>
+
+          <SidebarFooter collapsed={collapsed} />
+        </div>
+      </ProSidebar>
+
+      <main>
+        <div style={{ padding: '16px 24px', color: '#44596e' }}>
+          <div style={{ marginBottom: '16px' }}>
+            {broken && <button className="sb-button" onClick={() => setToggled(!toggled)}>Toggle</button>}
+          </div>
+          <div style={{ marginBottom: '48px' }}>
+            <Typography variant="h4" fontWeight={600}>React Pro Sidebar</Typography>
+            <Typography variant="body2">React Pro Sidebar provides a set of components for creating high level and customizable side navigation</Typography>
+            <PackageBadges />
+          </div>
+          <div style={{ padding: '0 8px' }}>
+            <div style={{ marginBottom: 16 }}>
+              <Switch id="collapse" checked={collapsed} onChange={() => setCollapsed(!collapsed)} label="Collapse" />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <Switch id="rtl" checked={rtl} onChange={handleRTLChange} label="RTL" />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <Switch id="theme" checked={theme === 'dark'} onChange={handleThemeChange} label="Dark theme" />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <Switch id="image" checked={hasImage} onChange={handleImageChange} label="Image" />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   );
-};
-
-const Sidebar = React.forwardRef<HTMLHtmlElement, SidebarProps>(SidebarFR);
-export default Sidebar;
-
+}

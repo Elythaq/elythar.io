@@ -1,0 +1,10 @@
+export { default as Badge } from './Badge';
+export { default as Book } from './Book';
+export { default as Calendar } from './Calendar';
+export { default as Diamond } from './Diamond';
+export { default as Github } from './Github';
+export { default as Global } from './Global';
+export { default as Icon } from './Icon';
+export { default as InkBottle } from './InkBottle';
+export { default as Service } from './Service';
+export { default as ShoppingCart } from './ShoppingCart';
