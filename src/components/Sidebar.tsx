@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { BarChart } from '@/icons/BarChart';
+import { Sun, Moon } from 'lucide-react';
 import { Global } from '@/icons/Global';
 import { InkBottle } from '@/icons/InkBottle';
 import { Diamond } from '@/icons/Diamond';
@@ -16,6 +17,7 @@ import { Typography } from '@/components/Typography';
 import { Switch } from '@/components/Switch';
 import { Badge } from '@/components/Badge';
 import { PackageBadges } from '@/components/PackageBadges';
+import '@/app/globals.css';
 
 const themes = {
   light: {
@@ -53,6 +55,7 @@ const themes = {
     },
   },
 };
+
 
 const hexToRgba = (hex: string, alpha: number) => {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -99,19 +102,42 @@ export default function Sidebar() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100%', direction: rtl ? 'rtl' : 'ltr' }}>
+    <div className={`flex h-screen ${rtl ? 'flex-row-reverse' : ''}`}>
+      <input type="checkbox" id="checkbox" onChange={() => setCollapsed(!collapsed)} style={{ display: 'none' }} />
+		<label
+		  htmlFor="checkbox"
+			  className={`toggle absolute top-26 z-[999] transition-all duration-300 ${
+                rtl
+				  ? collapsed
+					? 'right-[60px]'
+					: 'right-[220px]'
+				  : collapsed
+					? 'left-[60px]'
+					: 'left-[220px]'
+						}`}
+		>
+		  <div className="bars" id="bar1"></div>
+		  <div className="bars" id="bar2"></div>
+		</label>
       <ProSidebar
         collapsed={collapsed}
         toggled={toggled}
         onBackdropClick={() => setToggled(false)}
         onBreakPoint={setBroken}
-        image={hasImage ? 'https://user-images.githubusercontent.com/25878302/144499035-2911184c-76d3-4611-86e7-bc4e8ff84ff5.jpg' : undefined}
+        image={hasImage ? 'sidebar-bg.png' : undefined}
         rtl={rtl}
         breakPoint="md"
         backgroundColor={hexToRgba(themes[theme].sidebar.backgroundColor, hasImage ? 0.9 : 1)}
         rootStyles={{ color: themes[theme].sidebar.color }}
+		className="!m-0 !p-0"
+		  style={{
+			margin: 0,
+			padding: 0,
+			height: '100vh',
+			position: 'relative',
+		  }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
           <SidebarHeader rtl={rtl} style={{ marginBottom: '24px', marginTop: '16px' }} />
 
           <div style={{ flex: 1, marginBottom: '32px' }}>
@@ -127,10 +153,6 @@ export default function Sidebar() {
               <SubMenu label="Maps" icon={<Global />}>
                 <MenuItem>Google maps</MenuItem>
                 <MenuItem>Open street maps</MenuItem>
-              </SubMenu>
-              <SubMenu label="Theme" icon={<InkBottle />}>
-                <MenuItem>Dark</MenuItem>
-                <MenuItem>Light</MenuItem>
               </SubMenu>
               <SubMenu label="Components" icon={<Diamond />}>
                 <MenuItem>Grid</MenuItem>
@@ -158,6 +180,17 @@ export default function Sidebar() {
               <MenuItem icon={<Calendar />} suffix={<Badge variant="success">New</Badge>}>Calendar</MenuItem>
               <MenuItem icon={<Book />}>Documentation</MenuItem>
               <MenuItem disabled icon={<Service />}>Examples</MenuItem>
+				<MenuItem
+				  icon={theme === 'dark' ? <Moon className="text-blue-400" /> : <Sun className="text-yellow-400" />}
+				>
+				  <button
+					onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+					className="w-full text-left flex items-center gap-2 text-sm hover:text-accent transition-colors"
+				  >
+					{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+				  </button>
+				</MenuItem>
+
             </Menu>
           </div>
 
@@ -177,13 +210,7 @@ export default function Sidebar() {
           </div>
           <div style={{ padding: '0 8px' }}>
             <div style={{ marginBottom: 16 }}>
-              <Switch id="collapse" checked={collapsed} onChange={() => setCollapsed(!collapsed)} label="Collapse" />
-            </div>
-            <div style={{ marginBottom: 16 }}>
               <Switch id="rtl" checked={rtl} onChange={handleRTLChange} label="RTL" />
-            </div>
-            <div style={{ marginBottom: 16 }}>
-              <Switch id="theme" checked={theme === 'dark'} onChange={handleThemeChange} label="Dark theme" />
             </div>
             <div style={{ marginBottom: 16 }}>
               <Switch id="image" checked={hasImage} onChange={handleImageChange} label="Image" />
