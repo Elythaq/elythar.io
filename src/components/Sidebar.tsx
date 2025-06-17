@@ -6,7 +6,18 @@ import { useSidebar } from '../hooks/useSidebar';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import { sidebarClasses } from '../utils/utilityClasses';
 import { StyledBackdrop } from '../styles/StyledBackdrop';
-
+import Link from 'next/link';
+import {
+  FaCube,
+  FaCogs,
+  FaThLarge,
+  FaPuzzlePiece,
+  FaUsers,
+  FaInfoCircle,
+  FaWrench,
+  FaAngleDown,
+  FaAngleUp,
+} from 'react-icons/fa';
 type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'always';
 
 const BREAK_POINTS: Record<BreakPoint, string> = {
