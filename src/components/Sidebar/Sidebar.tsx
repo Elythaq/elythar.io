@@ -6,7 +6,6 @@ import { Menu, MenuItem, SubMenu } from '@/components/Sidebar/';
 import { BarChart } from '@/icons/BarChart';
 import { useDarkMode } from "@/hooks/useDarkMode";
 import { Sun, Moon, ChevronLeft, ChevronRight } from 'lucide-react';
-import { DarkModeProvider } from "@/components/Sidebar/DarkModeContext";
 import { Global } from '@/icons/Global';
 import { Diamond } from '@/icons/Diamond';
 import { ShoppingCart } from '@/icons/ShoppingCart';
