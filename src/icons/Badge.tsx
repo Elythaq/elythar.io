@@ -1,61 +1,36 @@
-import styled from '@emotion/styled';
-import React from 'react';
+import React from "react";
 
 interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
-  variant?: 'info' | 'success' | 'warning' | 'danger';
-  shape?: 'circle' | 'rounded';
+  variant?: "info" | "success" | "warning" | "danger";
+  shape?: "circle" | "rounded";
 }
 
-const StyledBadge = styled.div<BadgeProps>`
-  min-width: 18px;
-  min-height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: ${({ shape }) => (shape === 'circle' ? '50%' : '16px')};
-  padding: ${({ shape }) => (shape === 'circle' ? '0' : '0 6px')};
-  font-size: 11px;
-  font-weight: 600;
+const variantClasses = {
+  info: "bg-[#048acd] text-white",
+  success: "bg-[#0cbb34] text-white",
+  warning: "bg-[#e25807] text-white",
+  danger: "bg-[#fb3939] text-white",
+};
 
-  ${({ variant }) => {
-    switch (variant) {
-      case 'info':
-        return `
-                background-color: #048acd;
-                color: #fff;
-                `;
-      case 'success':
-        return `
-                background-color: #0cbb34;
-                color: #fff;
-
-                `;
-      case 'danger':
-        return `
-                background-color: #fb3939;
-                color: #fff;
-
-                `;
-      case 'warning':
-        return `
-                background-color: #e25807;
-                color: #fff;
-
-                `;
-    }
-  }}
-`;
+const shapeClasses = {
+  circle: "rounded-full min-w-[18px] min-h-[18px] p-0",
+  rounded: "rounded-[16px] min-w-[18px] min-h-[18px] px-[6px] py-0",
+};
 
 export const Badge: React.FC<BadgeProps> = ({
   children,
-  variant = 'info',
-  shape = 'rounded',
+  variant = "info",
+  shape = "rounded",
+  className = "",
   ...rest
 }) => {
   return (
-    <StyledBadge variant={variant} shape={shape} {...rest}>
+    <div
+      className={`flex items-center justify-center font-semibold text-[11px] ${variantClasses[variant]} ${shapeClasses[shape]} ${className}`}
+      {...rest}
+    >
       {children}
-    </StyledBadge>
+    </div>
   );
 };

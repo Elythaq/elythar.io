@@ -2,11 +2,47 @@ import React from 'react';
 import { SidebarContext, SidebarContextProps } from '@/components/Sidebar/sidebarContext';
 import { ProSidebarProvider } from '@/components/Sidebar/ProSidebarProvider';
 
-export const useSidebar = (): SidebarContextProps => {
-  const context = React.useContext(SidebarContext);
-  if (context === undefined) {
-    //TODO: set better error message
-    throw new Error('ProSidebarProvider is required!');
+
+interface ProSidebarResult {
+  collapseSidebar: (collapsed?: boolean) => void;
+  toggleSidebar: (toggled?: boolean) => void;
+  broken: boolean;
+  collapsed: boolean;
+  toggled: boolean;
+  rtl: boolean;
+}
+
+export const useProSidebar = (): ProSidebarResult => {
+  const sidebarContext = useContext(SidebarContext);
+
+  if (!sidebarContext) {
+    throw new Error(
+      "useProSidebar must be used within a SidebarProvider. Please wrap your component with a SidebarProvider to use this hook."
+    );
   }
-  return context;
+
+  const collapseSidebar = useCallback(
+    (value?: boolean) => {
+      if (value === undefined) sidebarContext.updateCollapseState();
+      else sidebarContext.updateSidebarState({ collapsed: value });
+    },
+    [sidebarContext]
+  );
+
+  const toggleSidebar = useCallback(
+    (value?: boolean) => {
+      if (value === undefined) sidebarContext.updateToggleState();
+      else sidebarContext.updateSidebarState({ toggled: value });
+    },
+    [sidebarContext]
+  );
+
+  return {
+    collapseSidebar,
+    toggleSidebar,
+    collapsed: !!sidebarContext.collapsed,
+    broken: !!sidebarContext.broken,
+    toggled: !!sidebarContext.toggled,
+    rtl: !!sidebarContext.rtl,
+  };
 };
