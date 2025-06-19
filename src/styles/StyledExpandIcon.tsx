@@ -1,54 +1,59 @@
-import styled, { CSSObject } from '@emotion/styled';
+import React from "react";
 
-interface StyledExpandIconProps {
-  open?: boolean;
-  rtl?: boolean;
-}
+// Collapsed Icon: small filled circle
+export const StyledExpandIconCollapsed: React.FC<React.HTMLAttributes<HTMLSpanElement>> = ({ className = "", ...rest }) => (
+  <span
+    className={`inline-block w-[5px] h-[5px] rounded-full bg-current ${className}`}
+    {...rest}
+  />
+);
 
-interface StyledExpandIconWrapperProps {
+// Arrow Icon: rotated caret (simulate with borders)
+export const StyledExpandIcon: React.FC<{ open?: boolean; rtl?: boolean; className?: string }> = ({
+  open,
+  rtl,
+  className = "",
+  ...rest
+}) => {
+  // Use borders and rotation to mimic the caret/arrow
+  const rotate = open ? (rtl ? "-135deg" : "45deg") : "-45deg";
+  return (
+    <span
+      className={`
+        inline-block w-[5px] h-[5px] border-solid
+        ${rtl
+          ? "border-l-2 border-t-2 border-current"
+          : "border-r-2 border-b-2 border-current"}
+        transition-transform duration-300
+        ${className}
+      `}
+      style={{ transform: `rotate(${rotate})` }}
+      {...rest}
+    />
+  );
+};
+
+// Wrapper: absolute position only when top-level & collapsed
+export const StyledExpandIconWrapper: React.FC<{
   collapsed?: boolean;
   level?: number;
   rtl?: boolean;
-  rootStyles?: CSSObject;
-}
-
-export const StyledExpandIconWrapper = styled.span<StyledExpandIconWrapperProps>`
-  ${({ collapsed, level, rtl }) =>
-    collapsed &&
-    level === 0 &&
-    `
-    position: absolute;
-    ${rtl ? 'left: 10px;' : 'right: 10px;'}
-    top: 50%;
-    transform: translateY(-50%);
-    
-    `}
-
-  ${({ rootStyles }) => rootStyles};
-`;
-
-export const StyledExpandIcon = styled.span<StyledExpandIconProps>`
-  display: inline-block;
-  transition: transform 0.3s;
-  ${({ rtl }) =>
-    rtl
-      ? `
-          border-left: 2px solid currentcolor;
-          border-top: 2px solid currentcolor;
-        `
-      : ` border-right: 2px solid currentcolor;
-          border-bottom: 2px solid currentcolor;
-        `}
-
-  width: 5px;
-  height: 5px;
-  transform: rotate(${({ open, rtl }) => (open ? (rtl ? '-135deg' : '45deg') : '-45deg')});
-`;
-
-export const StyledExpandIconCollapsed = styled.span`
-  width: 5px;
-  height: 5px;
-  background-color: currentcolor;
-  border-radius: 50%;
-  display: inline-block;
-`;
+  className?: string;
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
+}> = ({ collapsed, level, rtl, className = "", style = {}, children, ...rest }) => {
+  const abs = collapsed && level === 0;
+  return (
+    <span
+      className={`
+        ${abs ? "absolute top-1/2 -translate-y-1/2" : ""}
+        ${abs && rtl ? "left-[10px]" : abs ? "right-[10px]" : ""}
+        ${className}
+      `}
+      style={style}
+      {...rest}
+    >
+      {children}
+    </span>
+  );
+};

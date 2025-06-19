@@ -1,17 +1,33 @@
-import styled, { CSSObject } from '@emotion/styled';
+import React from "react";
 
-interface StyledMenuSuffixProps {
+export const StyledMenuSuffix: React.FC<{
   firstLevel?: boolean;
   collapsed?: boolean;
   transitionDuration?: number;
-  rootStyles?: CSSObject;
-}
-
-export const StyledMenuSuffix = styled.span<StyledMenuSuffixProps>`
-  margin-right: 5px;
-  margin-left: 5px;
-  opacity: ${({ firstLevel, collapsed }) => (firstLevel && collapsed ? '0' : '1')};
-  transition: opacity ${({ transitionDuration }) => transitionDuration}ms;
-
-  ${({ rootStyles }) => rootStyles};
-`;
+  className?: string;
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
+}> = ({
+  firstLevel,
+  collapsed,
+  transitionDuration = 300,
+  className = "",
+  style = {},
+  children,
+  ...rest
+}) => (
+  <span
+    className={`
+      mr-[5px] ml-[5px] transition-opacity
+      ${className}
+    `}
+    style={{
+      opacity: firstLevel && collapsed ? 0 : 1,
+      transitionDuration: `${transitionDuration}ms`,
+      ...style,
+    }}
+    {...rest}
+  >
+    {children}
+  </span>
+);

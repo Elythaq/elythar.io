@@ -1,11 +1,8 @@
-import styled from '@emotion/styled';
+import React from "react";
 
-export const StyledBackdrop = styled.div`
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  z-index: 1;
-  background-color: rgb(0, 0, 0, 0.3);
-`;
+export const StyledBackdrop: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = "", ...rest }) => (
+  <div
+    className={`fixed inset-0 z-[1] bg-black bg-opacity-30 ${className}`}
+    {...rest}
+  />
+);
