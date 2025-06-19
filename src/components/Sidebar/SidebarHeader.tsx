@@ -4,9 +4,10 @@ import { Typography } from "@/components/Sidebar/Typography";
 interface SidebarHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   rtl: boolean;
+  collapsed?: boolean;
 }
 
-export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ children, rtl, ...rest }) => (
+export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ children, rtl, collapsed, ...rest }) => (
   <div
     {...rest}
     className="h-16 min-h-16 flex items-center px-5"
@@ -19,9 +20,11 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ children, rtl, ...
       >
         P
       </div>
-      <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
-        Pro Sidebar
-      </Typography>
+      {!collapsed && (
+        <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
+          Pro Sidebar
+        </Typography>
+      )}
     </div>
   </div>
 );

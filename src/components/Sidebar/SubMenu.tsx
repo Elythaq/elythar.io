@@ -108,7 +108,7 @@ const SubMenuFR: React.ForwardRefRenderFunction<HTMLLIElement, SubMenuProps> = (
       >
         {icon && <span className={iconClasses}>{icon}</span>}
         {prefix && <span className={prefixClasses}>{prefix}</span>}
-        <span className={labelClasses}>{label}</span>
+        <span className={labelClasses}>{!collapsed && label}</span>
         {suffix && <span className={suffixClasses}>{suffix}</span>}
         {/* Expand Icon */}
         <span

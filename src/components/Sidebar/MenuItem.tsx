@@ -91,9 +91,9 @@ const MenuItemFR: React.ForwardRefRenderFunction<HTMLLIElement, MenuItemProps> =
           </span>
         )}
 
-        <span className={classNames(labelClasses, menuClasses.label, sharedClasses)}>
-          {children}
-        </span>
+		<span className={classNames(labelClasses, menuClasses.label, sharedClasses)}>
+		  {!collapsed && children}
+		</span>
 
         {suffix && (
           <span className={classNames(suffixClasses, menuClasses.suffix, sharedClasses)}>

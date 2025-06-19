@@ -4,7 +4,9 @@ import React, { useContext } from 'react';
 import { SidebarProvider, SidebarContext } from '@/components/Sidebar/sidebarContext';
 import { Menu, MenuItem, SubMenu } from '@/components/Sidebar/';
 import { BarChart } from '@/icons/BarChart';
+import { useDarkMode } from "@/hooks/useDarkMode";
 import { Sun, Moon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { DarkModeProvider } from "@/components/Sidebar/DarkModeContext";
 import { Global } from '@/icons/Global';
 import { Diamond } from '@/icons/Diamond';
 import { ShoppingCart } from '@/icons/ShoppingCart';
@@ -21,7 +23,7 @@ import '@/styles/globals.css';
 
 function SidebarContent() {
   const sidebar = useContext(SidebarContext);
-
+  const [dark, setDark] = useDarkMode();
   // Safeguard: if context is not ready, don't render
   if (!sidebar) return null;
 
@@ -32,7 +34,7 @@ function SidebarContent() {
   const [hasImage, setHasImage] = React.useState(false);
 
   return (
-    <aside className={`flex flex-col h-screen w-64 bg-gradient-to-b from-blue-900 to-cyan-400 text-white shadow-lg transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'} ${rtl ? 'flex-row-reverse' : ''}`}>
+    <aside className={`relative flex flex-col h-screen w-64 transition-all duration-300 bg-gradient-to-b from-blue-900 to-cyan-400 text-white shadow-lg ${collapsed ? 'w-20' : 'w-64'} ${rtl ? 'flex-row-reverse' : ''}`}>
       {/* Sidebar Header */}
       <SidebarHeader rtl={rtl} style={{ marginBottom: 24, marginTop: 16 }} />
 
@@ -81,16 +83,16 @@ function SidebarContent() {
             <MenuItem icon={<Calendar />} suffix={<Badge variant="success">New</Badge>}>Calendar</MenuItem>
             <MenuItem icon={<Book />}>Documentation</MenuItem>
             <MenuItem disabled icon={<Service />}>Examples</MenuItem>
-            <MenuItem
-              icon={theme === 'dark' ? <Moon className="text-blue-400" /> : <Sun className="text-yellow-400" />}
-            >
-              <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="w-full text-left flex items-center gap-2 text-sm hover:text-accent transition-colors"
-              >
-                {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
-              </button>
-            </MenuItem>
+			<MenuItem
+				  icon={dark ? <Moon className="text-blue-400" /> : <Sun className="text-yellow-400" />}
+				>
+				  <button
+					onClick={() => setDark(!dark)}
+					className="w-full text-left flex items-center gap-2 text-sm hover:text-accent transition-colors"
+				  >
+					{dark ? "Dark Mode" : "Light Mode"}
+				  </button>
+				</MenuItem>
           </Menu>
         </div>
         {/* Sidebar Footer */}
@@ -98,13 +100,19 @@ function SidebarContent() {
       </nav>
 
       {/* Collapsed Toggle */}
-		<button
-		  onClick={updateCollapseState}
-		  className="absolute top-6 -left-1 w-7 h-7 rounded-full bg-blue-600 text-white shadow flex items-center justify-center transition-all border border-blue-900"
-		  title="Toggle sidebar"
-		>
-		  {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-		</button>
+		  <button
+			onClick={updateCollapseState}
+			className={`absolute top-1/2 -right-3 z-20 w-7 h-7 rounded-full bg-blue-600 text-white shadow flex items-center justify-center border border-blue-900 transition-all
+			  ${collapsed ? 'transform -translate-y-1/2 right-[-14px]' : 'transform -translate-y-1/2 right-[-14px]'}
+			  `}
+			style={{
+			  // ensures it's always vertically centered
+			  transform: "translateY(-50%)"
+			}}
+			title="Toggle sidebar"
+		  >
+			{collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+		  </button>
     </aside>
   );
 }
