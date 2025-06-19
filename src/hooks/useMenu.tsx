@@ -1,5 +1,5 @@
 import React from 'react';
-import { MenuContext, MenuContextProps } from '../components/Menu';
+import { MenuContext, MenuContextProps } from '@/components/Sidebar/Menu';
 
 export const useMenu = (): MenuContextProps => {
   const context = React.useContext(MenuContext);

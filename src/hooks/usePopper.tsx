@@ -1,6 +1,6 @@
 import React from 'react';
 import { createPopper } from '@popperjs/core';
-import { useSidebar } from './useSidebar';
+import { useSidebar } from '@/hooks/useSidebar';
 
 interface PopperOptions {
   level: number;

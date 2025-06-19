@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSidebar } from './useSidebar';
-import { ProSidebarProvider } from '@/components/ProSidebarProvider';
+import { useSidebar } from '@/useSidebar';
+import { ProSidebarProvider } from '@/components/Sidebar/ProSidebarProvider';
 
 interface ProSidebarResult {
   /**
