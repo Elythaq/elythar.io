@@ -4,6 +4,7 @@ import { SidebarContext } from "@/components/Sidebar/sidebarContext";
 interface ProSidebarResult {
   collapseSidebar: (collapsed?: boolean) => void;
   toggleSidebar: (toggled?: boolean) => void;
+  updateSidebarState: (values: Partial<any>) => void; // <--- added
   broken: boolean;
   collapsed: boolean;
   toggled: boolean;
@@ -38,6 +39,7 @@ export const useProSidebar = (): ProSidebarResult => {
   return {
     collapseSidebar,
     toggleSidebar,
+    updateSidebarState: sidebarContext.updateSidebarState, // <--- added
     collapsed: !!sidebarContext.collapsed,
     broken: !!sidebarContext.broken,
     toggled: !!sidebarContext.toggled,

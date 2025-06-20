@@ -1,6 +1,5 @@
 'use client';
-console.log("Sidebar component is rendering");
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { useProSidebar } from "@/hooks/useSidebar";
 import { Menu } from '@/components/Sidebar/Menu';
 import { MenuItem } from '@/components/Sidebar/MenuItem';
@@ -17,12 +16,10 @@ import { Service } from '@/icons/Service';
 import { SidebarHeader } from '@/components/Sidebar/SidebarHeader';
 import { SidebarFooter } from '@/components/Sidebar/SidebarFooter';
 import { Typography } from '@/components/Sidebar/Typography';
-import { Switch } from '@/components/Sidebar/Switch';
 import { Badge } from '@/components/Sidebar/Badge';
 import { PackageBadges } from '@/components/Sidebar/PackageBadges';
 import '@/styles/globals.css';
 
-// Theme logic as before
 const themes = {
   light: {
     sidebar: {
@@ -68,21 +65,53 @@ const hexToRgba = (hex: string, alpha: number) => {
 };
 
 export default function Sidebar() {
-  // Use your own context/hook
-  const {
-    collapsed,
-    toggled,
-    broken,
-    rtl,
-    collapseSidebar,
-    toggleSidebar,
-  } = useProSidebar();
+	const {
+	  collapsed,
+	  rtl,
+	  collapseSidebar,
+	  updateSidebarState, 
+	} = useProSidebar();
 
-  // These are UI-only, not part of the sidebar context
-  const [hasImage, setHasImage] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
-  // MenuItemStyles logic is currently not dynamic via Tailwind, but kept for compatibility
+  // Theme & Background state
+  const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
+  const [bgImage, setBgImage] = React.useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Move collapse toggle to edge, centered vertically
+  const CollapseToggle = (
+    <button
+      onClick={() => collapseSidebar()}
+      aria-label="Toggle sidebar"
+      className={`
+        fixed z-[999] transition-all duration-300 bg-blue-600 text-white rounded-full shadow
+        w-8 h-8 flex items-center justify-center
+        top-1/2 -translate-y-1/2
+        ${rtl
+          ? collapsed
+            ? 'right-2'
+            : 'right-[230px]'
+          : collapsed
+            ? 'left-2'
+            : 'left-[230px]'
+        }
+      `}
+      style={{ border: 0 }}
+    >
+      <span className="sr-only">Toggle sidebar</span>
+      {collapsed ? (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+          <polyline points={rtl ? "9 18 15 12 9 6" : "15 18 9 12 15 6"} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ) : (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+          <polyline points={rtl ? "9 18 15 12 9 6" : "15 18 9 12 15 6"} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
+    </button>
+  );
+
+  // Menu styles for compatibility (can be cleaned up if all Tailwind)
   const menuItemStyles = {
     root: {
       fontSize: '13px',
@@ -97,14 +126,14 @@ export default function Sidebar() {
     subMenuContent: ({ level }: any) => ({
       backgroundColor:
         level === 0
-          ? hexToRgba(themes[theme].menu.menuContent, hasImage && !collapsed ? 0.4 : 1)
+          ? hexToRgba(themes[theme].menu.menuContent, bgImage && !collapsed ? 0.4 : 1)
           : 'transparent',
     }),
     button: {
       '&:hover': {
         backgroundColor: hexToRgba(
           themes[theme].menu.hover.backgroundColor,
-          hasImage ? 0.8 : 1
+          bgImage ? 0.8 : 1
         ),
         color: themes[theme].menu.hover.color,
       },
@@ -114,43 +143,55 @@ export default function Sidebar() {
     }),
   };
 
-  // --- Collapse Toggle Button ---
-  const CollapseToggle = (
-    <button
-      onClick={() => collapseSidebar()}
-      aria-label="Toggle sidebar"
-      className={`
-        fixed top-6 z-[999] transition-all duration-300 bg-blue-600 text-white rounded-full shadow
-        w-8 h-8 flex items-center justify-center
-        ${rtl
-          ? collapsed
-            ? 'right-2'
-            : 'right-[230px]'
-          : collapsed
-            ? 'left-2'
-            : 'left-[230px]'
-        }
-      `}
-      style={{ border: 0 }}
+  // Theme switcher: icon is a clickable area (not a Switch!)
+  const ThemeToggle = (
+    <MenuItem
+      icon={theme === 'dark' ? <Moon className="text-blue-400" /> : <Sun className="text-yellow-400" />}
+      className="cursor-pointer"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
-      <span className="sr-only">Toggle sidebar</span>
-      {collapsed ? (
-        <>
-          <div className="w-4 h-0.5 bg-white mb-1"></div>
-          <div className="w-4 h-0.5 bg-white"></div>
-        </>
-      ) : (
-        rtl ? (
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
-            <polyline points="9 18 15 12 9 6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        ) : (
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
-            <polyline points="15 18 9 12 15 6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        )
-      )}
-    </button>
+      <span className="w-full flex items-center gap-2 text-sm">
+        {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+      </span>
+    </MenuItem>
+  );
+
+  // Sidebar background: upload and clear
+  const handleBgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const url = URL.createObjectURL(e.target.files[0]);
+      setBgImage(url);
+    }
+  };
+
+  const SidebarBgToggle = (
+    <MenuItem
+      icon={<img src={bgImage || '/sidebar-bg.png'} alt="bg" className="w-5 h-5 rounded object-cover" />}
+      className="cursor-pointer flex items-center"
+    >
+      <div className="flex items-center gap-2 w-full">
+        <span>Sidebar Background</span>
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="px-2 py-1 text-xs bg-blue-500 rounded text-white hover:bg-blue-700 transition"
+          type="button"
+        >{bgImage ? "Change" : "Upload"}</button>
+        {bgImage && (
+          <button
+            onClick={() => setBgImage(null)}
+            className="px-2 py-1 text-xs bg-gray-300 rounded text-gray-700 hover:bg-gray-400 transition"
+            type="button"
+          >Remove</button>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleBgUpload}
+        />
+      </div>
+    </MenuItem>
   );
 
   return (
@@ -160,28 +201,24 @@ export default function Sidebar() {
       {/* SIDEBAR */}
       <aside
         className={`
-          relative
-          transition-all duration-300
+          relative transition-all duration-300
           bg-white dark:bg-[#0b2948]
           ${collapsed ? 'w-[80px]' : 'w-[250px]'}
-          h-full
-          border-r
-          z-30
+          h-full border-r z-30
         `}
         style={{
-          backgroundColor: hexToRgba(themes[theme].sidebar.backgroundColor, hasImage ? 0.9 : 1),
+          backgroundColor: hexToRgba(themes[theme].sidebar.backgroundColor, bgImage ? 0.9 : 1),
           color: themes[theme].sidebar.color,
         }}
       >
-        {hasImage && (
+        {bgImage && (
           <img
-            src="/sidebar-bg.png"
+            src={bgImage}
             alt="sidebar background"
             className="absolute inset-0 w-full h-full object-cover opacity-50 pointer-events-none z-0"
             draggable={false}
           />
         )}
-
         <div className="flex flex-col h-full relative z-10">
           <SidebarHeader rtl={rtl} collapsed={collapsed} style={{ marginBottom: '24px', marginTop: '16px' }} />
 
@@ -237,53 +274,26 @@ export default function Sidebar() {
               <MenuItem icon={<Calendar />} suffix={<Badge variant="success">New</Badge>}>Calendar</MenuItem>
               <MenuItem icon={<Book />}>Documentation</MenuItem>
               <MenuItem disabled icon={<Service />}>Examples</MenuItem>
-              <MenuItem
-                icon={theme === 'dark' ? <Moon className="text-blue-400" /> : <Sun className="text-yellow-400" />}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <span>{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
-                  <Switch
-                    checked={theme === 'dark'}
-                    onChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                    aria-label="Toggle dark mode"
-                    className="ml-2"
-                  />
-                </div>
-              </MenuItem>
+              {ThemeToggle}
+              {SidebarBgToggle}
+				<MenuItem
+				  icon={
+					<span className="material-icons">
+					  {rtl ? "format_textdirection_l_to_r" : "format_textdirection_r_to_l"}
+					</span>
+				  }
+				  className="cursor-pointer"
+				  onClick={() => updateSidebarState({ rtl: !rtl })}
+				>
+				  <span>RTL</span>
+</MenuItem>
+
             </Menu>
           </div>
 
           <SidebarFooter collapsed={collapsed} />
         </div>
       </aside>
-
-      {/* MAIN CONTENT */}
-      <main className="flex-1 bg-gray-50 dark:bg-[#121a2e] overflow-y-auto">
-        <div className="p-6" style={{ color: '#44596e' }}>
-          <div className="mb-4">
-            {broken && (
-              <button className="sb-button" onClick={toggleSidebar}>
-                Toggle
-              </button>
-            )}
-          </div>
-          <div className="mb-12">
-            <Typography variant="h4" fontWeight={600}>Custom Sidebar</Typography>
-            <Typography variant="body2">
-              This sidebar uses your own components, hooks, and context—fully custom, fully extendable.
-            </Typography>
-            <PackageBadges />
-          </div>
-          <div className="px-2">
-            <div className="mb-4">
-              <Switch id="rtl" checked={rtl} onChange={() => collapseSidebar()} label="RTL" />
-            </div>
-            <div className="mb-4">
-              <Switch id="image" checked={hasImage} onChange={() => setHasImage(!hasImage)} label="Image" />
-            </div>
-          </div>
-        </div>
-      </main>
     </div>
   );
 }
