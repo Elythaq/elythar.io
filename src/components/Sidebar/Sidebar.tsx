@@ -1,5 +1,7 @@
 'use client';
 import React, { useRef } from 'react';
+import RtlToggle from "@/components/Sidebar/RtlToggle";
+import { Switch } from "@/components/Sidebar/Switch";
 import { useProSidebar } from "@/hooks/useSidebar";
 import { Menu } from '@/components/Sidebar/Menu';
 import { MenuItem } from '@/components/Sidebar/MenuItem';
@@ -276,18 +278,12 @@ export default function Sidebar() {
               <MenuItem disabled icon={<Service />}>Examples</MenuItem>
               {ThemeToggle}
               {SidebarBgToggle}
-				<MenuItem
-				  icon={
-					<span className="material-icons">
-					  {rtl ? "format_textdirection_l_to_r" : "format_textdirection_r_to_l"}
-					</span>
-				  }
-				  className="cursor-pointer"
-				  onClick={() => updateSidebarState({ rtl: !rtl })}
-				>
-				  <span>RTL</span>
-</MenuItem>
-
+				<MenuItem>
+				  <RtlToggle
+					checked={rtl}
+					onChange={() => updateSidebarState({ rtl: !rtl })}
+				  />
+				</MenuItem>
             </Menu>
           </div>
 
