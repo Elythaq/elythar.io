@@ -77,38 +77,45 @@ export default function Sidebar() {
   const [bgImage, setBgImage] = React.useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Collapse toggle
-  const CollapseToggle = (
-    <button
-      onClick={() => collapseSidebar()}
-      aria-label="Toggle sidebar"
-      className={`
-        fixed z-[999] transition-all duration-300 bg-blue-600 text-white rounded-full shadow
-        w-8 h-8 flex items-center justify-center
-        top-1/2 -translate-y-1/2
-        ${rtl
-          ? collapsed
-            ? 'right-2'
-            : 'right-[230px]'
-          : collapsed
-            ? 'left-2'
-            : 'left-[230px]'
-        }
-      `}
-      style={{ border: 0 }}
-    >
-      <span className="sr-only">Toggle sidebar</span>
-      {collapsed ? (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
-          <polyline points={rtl ? "9 18 15 12 9 6" : "15 18 9 12 15 6"} strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      ) : (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
-          <polyline points={rtl ? "9 18 15 12 9 6" : "15 18 9 12 15 6"} strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      )}
-    </button>
-  );
+	// Collapse toggle
+	const CollapseToggle = (
+	  <button
+		onClick={() => collapseSidebar()}
+		aria-label="Toggle sidebar"
+		className={`
+		  fixed z-[999] transition-all duration-300 bg-blue-600 text-white rounded-full shadow
+		  w-8 h-8 flex items-center justify-center
+		  top-1/2 -translate-y-1/2
+		`}
+		style={
+		  rtl
+			? { right: collapsed ? '60px' : '232px' } // 232 = 250(sidebar) - 18 (half toggle), adjust to '-28px' for half out (w-8 is 32px)
+			: { left: collapsed ? '60px' : '232px' }
+		}
+	  >
+		<span className="sr-only">Toggle sidebar</span>
+		<svg
+		  className="w-5 h-5"
+		  fill="none"
+		  stroke="currentColor"
+		  strokeWidth={3}
+		  viewBox="0 0 24 24"
+		>
+		  <polyline
+			points={rtl
+			  ? collapsed
+				? "15 18 9 12 15 6" // points left when collapsed (RTL)
+				: "9 18 15 12 9 6"  // points right when expanded (RTL)
+			  : collapsed
+				? "9 18 15 12 9 6"  // points right when collapsed (LTR)
+				: "15 18 9 12 15 6" // points left when expanded (LTR)
+			}
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		  />
+		</svg>
+	  </button>
+	);
 
   // Menu styles
   const menuItemStyles = {
