@@ -102,7 +102,7 @@ npm run dev
 ## 📜 License
 
 This repository and all original code, including the sidebar navigation UI and supporting logic, are **proprietary and not open source**.  
-All rights reserved © 2024–present, Elythar.io / [Fadi Helal].
+All rights reserved © 2025–present, Elythar.io / [Fadi Helal].
 
 You **may not copy, modify, redistribute, or use this codebase or its components for commercial or non-commercial purposes without explicit written permission** from the author.
 
