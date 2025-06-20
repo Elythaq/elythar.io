@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useState, ForwardRefRenderFunction, forwardRef } from "react";
 import { menuClasses } from "@/utils/utilityClasses";
 import { useMenu } from "@/hooks/useMenu";

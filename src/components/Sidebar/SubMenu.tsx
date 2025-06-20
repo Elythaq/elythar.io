@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useContext, useRef, useState, useCallback, useEffect, forwardRef } from "react";
 import classNames from "classnames";
 import { SubMenuContent } from "@/components/Sidebar/SubMenuContent";
