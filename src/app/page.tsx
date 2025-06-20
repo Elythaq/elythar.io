@@ -16,7 +16,7 @@ export default function Home() {
         </a>
         <a
           className="rounded border border-blue-700 px-4 py-2 text-blue-300 hover:bg-blue-700 hover:text-white transition"
-          href="#dashboard"
+          href="dashboard"
         >
           Go to Dashboard
         </a>

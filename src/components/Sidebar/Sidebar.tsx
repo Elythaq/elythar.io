@@ -19,7 +19,6 @@ import { SidebarHeader } from '@/components/Sidebar/SidebarHeader';
 import { SidebarFooter } from '@/components/Sidebar/SidebarFooter';
 import { Typography } from '@/components/Sidebar/Typography';
 import { Badge } from '@/components/Sidebar/Badge';
-import { PackageBadges } from '@/components/Sidebar/PackageBadges';
 import '@/styles/globals.css';
 
 const themes = {
@@ -67,20 +66,18 @@ const hexToRgba = (hex: string, alpha: number) => {
 };
 
 export default function Sidebar() {
-	const {
-	  collapsed,
-	  rtl,
-	  collapseSidebar,
-	  updateSidebarState, 
-	} = useProSidebar();
+  const {
+    collapsed,
+    rtl,
+    collapseSidebar,
+    updateSidebarState,
+  } = useProSidebar();
 
-
-  // Theme & Background state
   const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
   const [bgImage, setBgImage] = React.useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Move collapse toggle to edge, centered vertically
+  // Collapse toggle
   const CollapseToggle = (
     <button
       onClick={() => collapseSidebar()}
@@ -113,7 +110,7 @@ export default function Sidebar() {
     </button>
   );
 
-  // Menu styles for compatibility (can be cleaned up if all Tailwind)
+  // Menu styles
   const menuItemStyles = {
     root: {
       fontSize: '13px',
@@ -145,7 +142,7 @@ export default function Sidebar() {
     }),
   };
 
-  // Theme switcher: icon is a clickable area (not a Switch!)
+  // Theme switcher
   const ThemeToggle = (
     <MenuItem
       icon={theme === 'dark' ? <Moon className="text-blue-400" /> : <Sun className="text-yellow-400" />}
@@ -158,7 +155,7 @@ export default function Sidebar() {
     </MenuItem>
   );
 
-  // Sidebar background: upload and clear
+  // Sidebar background
   const handleBgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const url = URL.createObjectURL(e.target.files[0]);
@@ -196,17 +193,23 @@ export default function Sidebar() {
     </MenuItem>
   );
 
+  // ----- SCROLL FIX -----
+  // Main return
   return (
-    <div className={`flex h-screen ${rtl ? 'flex-row-reverse' : ''}`}>
+    <div className={`fixed inset-y-0 z-30 ${rtl ? 'right-0' : 'left-0'} flex flex-col h-screen`}>
       {CollapseToggle}
-
-      {/* SIDEBAR */}
       <aside
+        dir={rtl ? "rtl" : "ltr"}
         className={`
-          relative transition-all duration-300
+          relative
+          transition-all duration-300
           bg-white dark:bg-[#0b2948]
-          ${collapsed ? 'w-[80px]' : 'w-[250px]'}
-          h-full border-r z-30
+          ${collapsed ? "w-[80px]" : "w-[250px]"}
+          h-full
+          ${rtl ? "border-l" : "border-r"}
+          flex flex-col
+          overflow-y-auto
+          scrollbar-thin scrollbar-thumb-blue-300 dark:scrollbar-thumb-blue-900
         `}
         style={{
           backgroundColor: hexToRgba(themes[theme].sidebar.backgroundColor, bgImage ? 0.9 : 1),
@@ -234,7 +237,18 @@ export default function Sidebar() {
                 General
               </Typography>
             </div>
-            <Menu menuItemStyles={menuItemStyles}>
+            <Menu menuItemStyles={menuItemStyles} renderExpandIcon={({ open }) => (
+              // Flip arrow for RTL
+              <svg
+                className={`w-3 h-3 transition-transform duration-200 ${open ? (rtl ? '-rotate-90' : 'rotate-90') : ''} ${rtl ? 'ml-2' : 'mr-2'}`}
+                viewBox="0 0 8 12"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ transform: open ? (rtl ? 'rotate(-90deg)' : 'rotate(90deg)') : undefined }}
+              >
+                <path d={rtl ? "M6 2L2 6L6 10" : "M2 2L6 6L2 10"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}>
               <SubMenu label="Charts" icon={<BarChart />} suffix={<Badge variant="danger" shape="circle">6</Badge>}>
                 <MenuItem>Pie charts</MenuItem>
                 <MenuItem>Line charts</MenuItem>
@@ -278,12 +292,12 @@ export default function Sidebar() {
               <MenuItem disabled icon={<Service />}>Examples</MenuItem>
               {ThemeToggle}
               {SidebarBgToggle}
-				<MenuItem>
-				  <RtlToggle
-					checked={rtl}
-					onChange={() => updateSidebarState({ rtl: !rtl })}
-				  />
-				</MenuItem>
+              <MenuItem>
+                <RtlToggle
+                  checked={rtl}
+                  onChange={() => updateSidebarState({ rtl: !rtl })}
+                />
+              </MenuItem>
             </Menu>
           </div>
 

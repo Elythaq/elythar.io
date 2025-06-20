@@ -3,11 +3,13 @@ import { ProSidebarProvider } from "@/components/Sidebar/ProSidebarProvider";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { SessionProvider, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { useProSidebar } from "@/hooks/useSidebar";
 import "@/styles/globals.css";
 
 function ProtectedLayout({ children }) {
   const pathname = usePathname();
   const { status } = useSession();
+  const { rtl, collapsed } = useProSidebar();
 
   if (pathname === "/login") return <>{children}</>;
   if (status === "loading") return <div>Loading...</div>;
@@ -16,10 +18,20 @@ function ProtectedLayout({ children }) {
     return null;
   }
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <main className="flex-1">{children}</main>
-    </div>
+			<div>
+			  <Sidebar />
+			  <main
+				className={`
+				  transition-all duration-300
+				  ${rtl
+					? collapsed ? "mr-[80px]" : "mr-[250px]"
+					: collapsed ? "ml-[80px]" : "ml-[250px]"
+				  }
+				`}
+			  >
+				{children}
+			  </main>
+			</div>
   );
 }
 
