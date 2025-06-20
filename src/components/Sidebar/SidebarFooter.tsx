@@ -9,7 +9,7 @@ interface SidebarFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const codeUrl =
-  "https://github.com/azouaoui-med/react-pro-sidebar/blob/master/storybook/Playground.tsx";
+  "https://github.com/Elythaq/elythar.io.git";
 
 export const SidebarFooter: React.FC<SidebarFooterProps> = ({
   children,

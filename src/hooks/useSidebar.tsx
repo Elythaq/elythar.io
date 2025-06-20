@@ -1,7 +1,5 @@
-import React from 'react';
-import { SidebarContext, SidebarContextProps } from '@/components/Sidebar/sidebarContext';
-import { ProSidebarProvider } from '@/components/Sidebar/ProSidebarProvider';
-
+import { useContext, useCallback } from "react";
+import { SidebarContext } from "@/components/Sidebar/sidebarContext";
 
 interface ProSidebarResult {
   collapseSidebar: (collapsed?: boolean) => void;
