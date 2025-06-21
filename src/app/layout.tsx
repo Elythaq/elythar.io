@@ -5,18 +5,16 @@ import Navbar from '@/components/Navbar/Navbar';
 import DashboardNavbar from "@/components/Navbar/DashboardNavbar";
 import { SessionProvider, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { DisplayProvider } from "@/context/DisplayContext";
 import "@/styles/globals.css";
 
-// Helper to detect dashboard routes (customize if needed)
 function isDashboardRoute(pathname) {
   return pathname.startsWith("/dashboard");
 }
 
-// Only for dashboard/protected routes
 function ProtectedLayout({ children }) {
   const pathname = usePathname();
   const { status } = useSession();
-  // Don't call useProSidebar() here—see note below
 
   if (pathname === "/login") return <>{children}</>;
   if (status === "loading") return <div>Loading...</div>;
@@ -24,16 +22,17 @@ function ProtectedLayout({ children }) {
     if (typeof window !== "undefined") window.location.href = "/login";
     return null;
   }
-  // Provide the sidebar context here!
+  // PROVIDER ADDED HERE!
   return (
-    <ProSidebarProvider>
-      <Sidebar />
-      <DashboardNavbar />
-      {/* Margin logic for Sidebar and Navbar */}
-      <div className="pt-16 transition-all duration-300 ml-[250px]"> {/* Default: sidebar open */}
-        {children}
-      </div>
-    </ProSidebarProvider>
+    <DisplayProvider>
+      <ProSidebarProvider>
+        <Sidebar />
+        <DashboardNavbar />
+        <div className="pt-16 transition-all duration-300 ml-[250px]">
+          {children}
+        </div>
+      </ProSidebarProvider>
+    </DisplayProvider>
   );
 }
 
