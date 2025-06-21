@@ -8,7 +8,7 @@ export default function DashboardLayout({ children }) {
   const sidebarWidth = collapsed ? 80 : 250;
 
   return (
-    <div>
+    <div className="relative min-h-screen ">
       <Sidebar className={`fixed ${rtl ? "right-0" : "left-0"} top-0 h-screen z-10`} />
       <DashboardNavbar />
       <main
