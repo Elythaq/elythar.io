@@ -204,7 +204,6 @@ export default function Sidebar() {
   // Main return
   return (
     <div className={`fixed inset-y-0 z-30 ${rtl ? 'right-0' : 'left-0'} flex flex-col h-screen`}>
-      {CollapseToggle}
       <aside
         dir={rtl ? "rtl" : "ltr"}
         className={`
