@@ -35,7 +35,7 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = ({
         <div className="mb-3">
           <Github size={30} />
         </div>
-        <Typography fontWeight={600}>Pro Sidebar</Typography>
+        <Typography fontWeight={600}>Elythar.io</Typography>
         <Typography
           variant="caption"
           style={{ letterSpacing: 1, opacity: 0.7 }}

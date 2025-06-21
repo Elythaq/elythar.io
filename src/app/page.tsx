@@ -10,7 +10,7 @@ export default function Home() {
       <div className="flex gap-4">
         <a
           className="rounded bg-blue-700 px-4 py-2 text-white font-medium hover:bg-blue-900 transition"
-          href="#products"
+          href="products"
         >
           Browse Products
         </a>
