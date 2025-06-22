@@ -8,20 +8,21 @@ export default function Hero() {
   return (
     <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden z-10">
       {/* Glow Halo Background */}
-      <motion.div
-        className="absolute top-[-30%] left-1/2 transform -translate-x-1/2 w-[800px] h-[800px] bg-gradient-radial from-purple-500/20 via-teal-400/10 to-transparent rounded-full blur-3xl"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.6 }}
-      />
-      {/* ✨ Parallax Element — Elythar Orb or Aura */}
-      <ParallaxLayer speed={50}>
-        <img
-          src="/ai-orb.png"
-          alt="AI Orb"
-          className="absolute top-[-100px] right-10 w-48 opacity-10 pointer-events-none select-none"
+      <div className="absolute inset-0 z-[-1] pointer-events-none overflow-hidden select-none">
+        <motion.div
+          className="absolute top-[-30%] left-1/2 transform -translate-x-1/2 w-[800px] h-[800px] bg-gradient-radial from-purple-500/20 via-teal-400/10 to-transparent rounded-full blur-3xl"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.6 }}
         />
-      </ParallaxLayer>
+        <ParallaxLayer speed={50}>
+          <img
+            src="/ai-orb.png"
+            alt="AI Orb"
+            className="absolute top-[-100px] right-10 w-48 opacity-10"
+          />
+        </ParallaxLayer>
+      </div>
       {/* Elythar Orb / Glyph */}
       <motion.img
         src="/logo.svg"

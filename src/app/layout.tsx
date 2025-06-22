@@ -2,6 +2,8 @@
 import { ProSidebarProvider } from "@/components/Sidebar/ProSidebarProvider";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Navbar from '@/components/Navbar/Navbar';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import DashboardNavbar from "@/components/Navbar/DashboardNavbar";
 import { SessionProvider, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -51,6 +53,7 @@ export default function RootLayout({ children }) {
             <>
               <Navbar />
               <main className="pt-16">{children}</main>
+              <Footer />
             </>
           )}
         </SessionProvider>

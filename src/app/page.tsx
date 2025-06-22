@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <div className="relative bg-[#0a0a1a] text-white min-h-screen overflow-x-hidden">
       {/* Glowing SVG + Particle Background */}
-      <div className="absolute inset-0 -z-10 pointer-events-none select-none overflow-hidden">
+      <div className="absolute inset-0 z-[-1] pointer-events-none select-none overflow-hidden">
         {/* SVG Glow Circuit */}
         <svg className="absolute w-full h-full" viewBox="0 0 1440 900" fill="none">
           <defs>
