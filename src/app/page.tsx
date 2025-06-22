@@ -6,6 +6,7 @@ import Services from '@/components/home/Services';
 import Timeline from '@/components/home/Timeline';
 import Team from '@/components/home/Team';
 import BlogPreview from '@/components/home/BlogPreview';
+import ScrollToTop from '@/components/ui/ScrollToTop';
 
 const Particles = dynamic(() => import('@/components/effects/Particles'), { ssr: false });
 
@@ -38,6 +39,7 @@ export default function HomePage() {
       <Timeline />
       <Team />
       <BlogPreview />
+      <ScrollToTop />
     </div>
   );
 }
