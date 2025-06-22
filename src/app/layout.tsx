@@ -2,10 +2,13 @@
 import { ProSidebarProvider } from "@/components/Sidebar/ProSidebarProvider";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Navbar from '@/components/Navbar/Navbar';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import DashboardNavbar from "@/components/Navbar/DashboardNavbar";
 import { SessionProvider, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { DisplayProvider } from "@/context/DisplayContext";
+import CursorGlow from '@/components/effects/CursorGlow';
 import "@/styles/globals.css";
 
 function isDashboardRoute(pathname) {
@@ -26,6 +29,7 @@ function ProtectedLayout({ children }) {
   return (
     <DisplayProvider>
       <ProSidebarProvider>
+	  <CursorGlow />
         <Sidebar />
         <DashboardNavbar />
         <div className="pt-16 transition-all duration-300 ml-[250px]">
@@ -49,6 +53,7 @@ export default function RootLayout({ children }) {
             <>
               <Navbar />
               <main className="pt-16">{children}</main>
+              <Footer />
             </>
           )}
         </SessionProvider>

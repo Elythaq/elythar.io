@@ -1,5 +1,5 @@
 import React from "react";
-import { Github } from "@/icons/Github";
+import { Github } from "@/assets/icons/Github";
 import { Typography } from "@/components/Sidebar/Typography";
 
 interface SidebarFooterProps extends React.HTMLAttributes<HTMLDivElement> {

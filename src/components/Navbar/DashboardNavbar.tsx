@@ -1,9 +1,9 @@
 'use client';
 
 import { useProSidebar } from "@/hooks/useSidebar";
-import { useSession, signOut } from 'next-auth/react';
-import { FiMenu } from 'react-icons/fi';
-import Link from 'next/link';
+import { useSession, signOut } from "next-auth/react";
+import { FiMenu } from "react-icons/fi";
+import Link from "next/link";
 
 export default function DashboardNavbar() {
   const { collapsed, collapseSidebar, rtl } = useProSidebar();
@@ -12,82 +12,71 @@ export default function DashboardNavbar() {
 
   return (
     <nav
-      className={`fixed top-0 z-20 h-16 bg-black/90 text-white flex items-center transition-all duration-200 w-full`}
-      style={
-        rtl
-          ? {
-              marginRight: sidebarWidth,
-              marginLeft: 0,
-              right: 0,
-              left: 'auto',
-              flexDirection: 'row-reverse' as any,
-              width: `calc(100% - ${sidebarWidth}px)`,
-            }
-          : {
-              marginLeft: sidebarWidth,
-              marginRight: 0,
-              left: 0,
-              right: 'auto',
-              flexDirection: 'row' as any,
-              width: `calc(100% - ${sidebarWidth}px)`,
-            }
-      }
+      className={`
+        fixed top-0 z-30 h-16 flex items-center justify-between px-4
+        bg-gradient-to-r from-[#0a0c1c]/90 via-[#0b1024]/90 to-[#101828]/90
+        backdrop-blur-md text-white transition-all duration-200 shadow-md
+      `}
+      style={{
+        [rtl ? "marginRight" : "marginLeft"]: sidebarWidth,
+        [rtl ? "right" : "left"]: 0,
+        [rtl ? "left" : "right"]: "auto",
+        width: `calc(100% - ${sidebarWidth}px)`,
+        flexDirection: rtl ? "row-reverse" : "row",
+      }}
       dir={rtl ? "rtl" : "ltr"}
     >
-      {/* 1. Sidebar Hamburger Button */}
-		<button
-		  className={`
-			text-2xl hover:text-orange-500
-			${rtl ? "pl-6" : "pr-6"}
-		  `}
-		  onClick={() => collapseSidebar(!collapsed)}
-		  title={collapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-		  style={{ order: rtl ? 3 : 1 }}
-		>
-		  <FiMenu />
-		</button>
+      {/* Sidebar Toggle */}
+      <button
+        onClick={() => collapseSidebar(!collapsed)}
+        className="text-2xl hover:text-orange-400 transition-colors"
+        title={collapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+        style={{ order: rtl ? 3 : 1 }}
+      >
+        <FiMenu />
+      </button>
 
-
-      {/* 2. Nav Items */}
+      {/* Navigation Links */}
       <div
-        className={`
-          flex flex-1 items-center gap-6 justify-center
-          ${rtl ? "flex-row-reverse" : "flex-row"}
-        `}
+        className={`flex-1 flex gap-6 items-center justify-center ${rtl ? "flex-row-reverse" : "flex-row"}`}
         style={{ order: 2 }}
       >
-        <Link href="/dashboard" className="hover:text-orange-400 font-semibold">
-          Dashboard
-        </Link>
-        <Link href="/dashboard/orders" className="hover:text-orange-400">
-          My Orders
-        </Link>
-        <Link href="/dashboard/downloads" className="hover:text-orange-400">
-          Downloads
-        </Link>
-        <Link href="/dashboard/settings" className="hover:text-orange-400">
-          Settings
-        </Link>
+        <NavLink href="/" label="Home" />
+        <NavLink href="/dashboard" label="Dashboard" />
+        <NavLink href="/dashboard/orders" label="My Orders" />
+        <NavLink href="/dashboard/downloads" label="Downloads" />
+        <NavLink href="/dashboard/analytics" label="Visualizations" />
+        <NavLink href="/dashboard/settings" label="Settings" />
       </div>
 
-      {/* 3. User Info/Sign Out */}
+      {/* User Info + Sign Out */}
       <div
-        className={`
-          flex items-center gap-3
-          ${rtl ? "flex-row pl-6" : "flex-row-reverse pr-6"}
-        `}
+        className={`flex items-center gap-3 truncate ${rtl ? "pl-6" : "pr-6"} ${rtl ? "flex-row" : "flex-row-reverse"}`}
         style={{ order: rtl ? 1 : 3, minWidth: 0 }}
       >
-        <span className="font-medium text-orange-400 truncate max-w-[120px]">
-          {session?.user?.name}
-        </span>
+        {session?.user?.name && (
+          <span className="font-medium text-orange-400 truncate max-w-[120px]">
+            {session.user.name}
+          </span>
+        )}
         <button
           onClick={() => signOut()}
-          className={`px-3 py-1 bg-orange-600 hover:bg-orange-500 rounded text-sm font-semibold`}
+          className="px-3 py-1 rounded bg-orange-600 hover:bg-orange-500 transition text-sm font-semibold"
         >
           Sign Out
         </button>
       </div>
     </nav>
+  );
+}
+
+function NavLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="relative text-sm font-semibold text-gray-300 hover:text-orange-400 transition"
+    >
+      {label}
+    </Link>
   );
 }
