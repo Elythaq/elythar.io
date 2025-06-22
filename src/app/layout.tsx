@@ -6,6 +6,7 @@ import DashboardNavbar from "@/components/Navbar/DashboardNavbar";
 import { SessionProvider, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { DisplayProvider } from "@/context/DisplayContext";
+import CursorGlow from '@/components/effects/CursorGlow';
 import "@/styles/globals.css";
 
 function isDashboardRoute(pathname) {
@@ -26,6 +27,7 @@ function ProtectedLayout({ children }) {
   return (
     <DisplayProvider>
       <ProSidebarProvider>
+	  <CursorGlow />
         <Sidebar />
         <DashboardNavbar />
         <div className="pt-16 transition-all duration-300 ml-[250px]">
