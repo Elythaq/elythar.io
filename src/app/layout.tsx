@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body>
+    <body className="min-h-screen bg-white text-[#171717] dark:bg-[#0a0a0a] dark:text-[#ededed] font-sans antialiased transition-colors">
         <SessionProvider>
           {isDashboardRoute(pathname) ? (
             <ProtectedLayout>{children}</ProtectedLayout>

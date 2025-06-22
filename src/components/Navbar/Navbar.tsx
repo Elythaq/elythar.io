@@ -1,11 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { useState } from 'react';
-import { FiMenu } from 'react-icons/fi';
-import { FaGlobe } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { FiMenu, FiSun, FiMoon } from 'react-icons/fi';
+import useHideOnScroll from '@/hooks/useHideOnScroll';
+import { FaGlobe } from "react-icons/fa";
 
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
@@ -19,122 +19,81 @@ const NAV_ITEMS = [
 
 export default function Navbar() {
   const { data: session } = useSession();
-  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [authModal, setAuthModal] = useState(false);
+  const [dark, setDark] = useState(true); // start in dark mode
+  const show = useHideOnScroll();
+
+  // Dark mode effect (simple Tailwind 'dark' class toggling)
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+  }, [dark]);
 
   return (
-    <nav className="w-full bg-black/80 text-white shadow-lg fixed top-0 z-30 backdrop-blur-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between h-16">
+    <nav
+      className={`
+        w-full fixed top-0 z-40 transition-transform duration-300
+        bg-[#232e3d]/95 text-white
+        shadow-lg backdrop-blur-lg
+        ${show ? 'translate-y-0' : '-translate-y-full'}
+        shadow-xl transition-shadow duration-500
+      `}
+    >
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 text-xl font-bold text-orange-500">
-          Elythar.io
+        <Link href="/" className="flex items-center gap-2">
+          <img src="/logo.svg" alt="Logo" className="h-8 w-8 object-contain" />
+          <span className="text-2xl font-bold text-green-400">Elythar.io</span>
         </Link>
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-2 flex-1 ml-8">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.label}
               href={item.href}
-              className={`relative px-3 py-2 rounded hover:bg-gray-900 ${
-                pathname === item.href ? 'text-orange-500 font-bold' : ''
-              }`}
+              className={`relative px-3 py-2 rounded hover:bg-gray-900/70 text-base`}
             >
               {item.label}
             </Link>
           ))}
+        </div>
+        {/* Right side: search, language, theme, auth */}
+        <div className="hidden md:flex items-center gap-2">
           <SearchBar />
           <LanguageDropdown />
-        </div>
-        {/* Auth/Login Awareness */}
-        <div className="hidden md:flex items-center gap-2">
-          {!session ? (
-            <>
-              <button
-                onClick={() => setAuthModal(true)}
-                className="rounded-lg bg-orange-600 px-4 py-2 text-white font-semibold hover:bg-orange-500 transition"
-              >
-                Get Started
-              </button>
-              <button
-                onClick={() => signIn()}
-                className="text-sm text-gray-200 hover:text-white px-2"
-              >
-                Login
-              </button>
-              <Link
-                href="/register"
-                className="text-sm text-orange-400 hover:underline px-2"
-              >
-                Register
-              </Link>
-            </>
-          ) : (
-            <>
-              <span className="mr-2">Hello, {session.user?.name || 'User'}</span>
-              <button
-                onClick={() => signOut()}
-                className="text-sm bg-gray-900 px-3 py-1 rounded hover:bg-gray-700"
-              >
-                Sign Out
-              </button>
-            </>
-          )}
-        </div>
-        {/* Mobile Hamburger */}
-        <button
-          className="md:hidden p-2 text-xl"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          <FiMenu />
-        </button>
-      </div>
-      {/* Mobile Drawer */}
-      {mobileOpen && (
-        <div className="md:hidden bg-black/90 backdrop-blur-lg absolute top-16 left-0 w-full py-4 z-40 flex flex-col gap-3">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`relative px-4 py-2 rounded hover:bg-gray-900 ${
-                pathname === item.href ? 'text-orange-500 font-bold' : ''
-              }`}
-              onClick={() => setMobileOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <SearchBar mobile />
-          <LanguageDropdown mobile />
-          <div className="flex flex-col gap-2 mt-4 px-4">
-            {!session ? (
+          {/* Theme Toggle Button */}
+          <button
+            onClick={() => setDark(!dark)}
+            className="ml-2 px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 hover:bg-gray-700 transition"
+            aria-label="Toggle Dark/Light"
+          >
+            {dark ? <FiSun className="text-yellow-300" /> : <FiMoon className="text-gray-300" />}
+          </button>
+          {/* Auth/Login Awareness */}
+          <div className="flex items-center gap-2 ml-4">
+            {!session && (
               <>
-                <button
-                  onClick={() => { setAuthModal(true); setMobileOpen(false); }}
-                  className="rounded-lg bg-orange-600 px-4 py-2 text-white font-semibold hover:bg-orange-500 transition"
+                <Link
+                  href="/login"
+                  className="px-4 py-1 bg-green-600 rounded font-bold text-white shadow hover:bg-green-700 transition"
                 >
                   Get Started
-                </button>
-                <button
-                  onClick={() => { signIn(); setMobileOpen(false); }}
-                  className="text-sm text-gray-200 hover:text-white px-2"
+                </Link>
+                <Link
+                  href="/login"
+                  className="px-4 py-1 border border-green-400 rounded font-bold text-green-400 bg-transparent hover:bg-green-500 hover:text-white transition"
                 >
                   Login
-                </button>
-                <Link
-                  href="/register"
-                  className="text-sm text-orange-400 hover:underline px-2"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Register
                 </Link>
               </>
-            ) : (
+            )}
+            {session && (
               <>
-                <span className="mb-2">Hello, {session.user?.name || 'User'}</span>
+                <span className="text-green-300 font-semibold mr-2">
+                  {session.user?.name}
+                </span>
                 <button
-                  onClick={() => { signOut(); setMobileOpen(false); }}
-                  className="text-sm bg-gray-900 px-3 py-1 rounded hover:bg-gray-700"
+                  onClick={() => signOut()}
+                  className="px-4 py-1 bg-orange-600 rounded font-bold text-white shadow hover:bg-orange-700 transition"
                 >
                   Sign Out
                 </button>
@@ -142,11 +101,12 @@ export default function Navbar() {
             )}
           </div>
         </div>
-      )}
-      {/* Modal for Auth (login/register) */}
-      {authModal && (
-        <AuthModal onClose={() => setAuthModal(false)} />
-      )}
+        {/* Mobile Hamburger */}
+        <button className="md:hidden p-2 text-xl" onClick={() => setMobileOpen(!mobileOpen)}>
+          <FiMenu />
+        </button>
+      </div>
+      {/* TODO: Implement Mobile Drawer if needed */}
     </nav>
   );
 }
